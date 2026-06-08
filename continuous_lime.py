@@ -101,11 +101,9 @@ class LimeStabilityAnalyzer:
             #inverse_data = self.generate_continuous(loc=X_instance, x_train=self.X,
                                                                 #num_samples=int(self.n_perturbation / 0.8))
 
-            #labels = self.model.predict_proba(inverse_data)[:, 0]
-            #scaled_data = (inverse_data-self.loc) / self.scale
-            #instance0 = (X_instance.reshape(1, -1)-self.loc) / self.scale
+          
             denominator = self.scale
-            denominator = np.where(denominator == 0, 1, denominator)  # Requires numpy
+            denominator = np.where(denominator == 0, 1, denominator) 
 
             scaled_data = (inverse_data-self.loc) / denominator
 
@@ -146,7 +144,7 @@ class LimeStabilityAnalyzer:
 
                 
                 coef_all[num].append(coef_full)
-                rank_group_all[num].append(coef_abs_full*col_std)  # Needs multiplication
+                rank_group_all[num].append(coef_abs_full*col_std)  
                 hit_group_all[num].append(len(set(used_features) & set(range(4))))
 
         rank_stab = {k: multiple_run_consistency(v) for k, v in rank_group_all.items()}
