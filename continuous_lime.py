@@ -144,13 +144,7 @@ class LimeStabilityAnalyzer:
                 sorted_indices = np.argsort(coef_abs_full)[::-1]
                 predict_fn = lambda x: self.model.predict_proba(x)[0, 0]
 
-                '''
-                d_auc_p = normalized_preservation_auc(predict_fn , X_instance.reshape(1, -1), sorted_indices, self.loc)
-                d_auc_d = normalized_deletion_auc(predict_fn , X_instance.reshape(1, -1), sorted_indices, self.loc)
-                d_auc_group_all_p[num].append(d_auc_p)
-                d_auc_group_all_d[num].append(d_auc_d)
-                '''
-
+                
                 coef_all[num].append(coef_full)
                 rank_group_all[num].append(coef_abs_full*col_std)  # Needs multiplication
                 hit_group_all[num].append(len(set(used_features) & set(range(4))))
@@ -163,8 +157,7 @@ class LimeStabilityAnalyzer:
         mse_std = {k: np.std(v) for k, v in mse_group_all.items()}
         hit_mean = {k: np.mean(v) for k, v in hit_group_all.items()}
         coef_mean = {k: np.mean(v,axis=0) for k, v in coef_all.items()}
-        #d_auc_mean_p = {k: np.mean(v, axis=0) for k, v in d_auc_group_all_p.items()}
-        #d_auc_mean_d = {k: np.mean(v, axis=0) for k, v in d_auc_group_all_d.items()}
+        
         rank_mean = {k: np.mean(v, axis=0) for k, v in rank_group_all.items()}
         rank_std = {k: np.std(v, axis=0) for k, v in rank_group_all.items()}
 
