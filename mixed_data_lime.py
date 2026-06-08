@@ -111,9 +111,7 @@ class LocalModelStabilityAnalyzer:
                 baseline = make_baseline(self.X, self.continuous_features, self.categorical_features)
                 predict1 = lambda x: self.predict_fn(x)[0, 0]
 
-                d_auc = normalized_preservation_auc(predict1, X_instance.reshape(1, -1), sorted_indices , baseline,
-                                         )
-                d_auc_group_all[num].append(d_auc)
+              
 
         rank_stab = {k: multiple_run_consistency(v) for k, v in rank_group_all.items()}
         use_stab = {k: stability_used_feature(v) for k, v in use_group_all.items()}
@@ -121,16 +119,16 @@ class LocalModelStabilityAnalyzer:
         r2_std = {k: np.std(v) for k, v in r2_group_all.items()}
         mse_mean = {k: np.mean(v) for k, v in mse_group_all.items()}
         mse_std = {k: np.std(v) for k, v in mse_group_all.items()}
-        d_auc_mean = {k: np.mean(v) for k, v in d_auc_group_all.items()}
+        
         #coef_mean= {k: np.mean(v,axis=0) for k, v in c_group_all.items()}
 
-        return c_group_all,d_auc_mean,r2_mean, r2_std, mse_mean, mse_std, rank_stab, use_stab
+        return c_group_all,r2_mean, r2_std, mse_mean, mse_std, rank_stab, use_stab
 
     # === Step 4: Main workflow ===
     def run_analysis(self, run_name=None):
         start_time = time.time()
         X_instance = self.instance
-        c_group_all,d_auc_mean,r2_mean, r2_std, mse_mean, mse_std, rank_stab, use_stab = self.run_single(X_instance)
+        c_group_all,r2_mean, r2_std, mse_mean, mse_std, rank_stab, use_stab = self.run_single(X_instance)
 
         end_time = time.time()  #
         duration = end_time - start_time
@@ -147,7 +145,7 @@ class LocalModelStabilityAnalyzer:
             "N": self.N,
             #"coef_mean":coef_mean,
             "c_group_all": c_group_all,
-            "d_auc_mean":d_auc_mean,
+            
             "n_perturbation": self.n_perturbation,
 
         }
