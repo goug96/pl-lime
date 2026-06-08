@@ -153,11 +153,7 @@ class LocalModelStabilityAnalyzer:
                 sorted_indices = np.argsort(kk)[::-1]
                 sorted_indices_x=[get_origal_order(i) for i in sorted_indices]
 
-                #d_auc, _, _ = deletion_auc1(self.model, X_instance.reshape(1, -1), sorted_indices_x, self.loc)
-                baseline=make_baseline(self.X, self.continuous_features, self.categorical_features)
-                predict1 = lambda x: self.predict_fn(x)[0, 0]
-                d_auc=normalized_preservation_auc(predict1, X_instance.reshape(1, -1), sorted_indices_x, baseline)
-                d_auc_group_all[num].append(d_auc)
+                
 
                 used_features = steps_k[0][1]
                 use_group_all[num].append(used_features)
@@ -168,7 +164,7 @@ class LocalModelStabilityAnalyzer:
         r2_std = {k: np.std(v) for k, v in r2_group_all.items()}
         mse_mean = {k: np.mean(v) for k, v in mse_group_all.items()}
         mse_std = {k: np.std(v) for k, v in mse_group_all.items()}
-        d_auc_mean = {k: np.mean(v, axis=0) for k, v in d_auc_group_all.items()}
+        
         use_set = defaultdict(list)
         prob_diagnostic = {
             "mid_ratio": np.mean([d["mid_ratio"] for d in prob_diag_all]),
@@ -185,7 +181,7 @@ class LocalModelStabilityAnalyzer:
             final_common = common_elements & continuous_set
             use_set[k] = final_common
 
-        return prob_diagnostic,d_auc_mean,uu_value,kknots,use_set,r2_mean,mse_mean,r2_std,mse_std,rank_stab,use_stab,rank_group_all
+        return prob_diagnostic,uu_value,kknots,use_set,r2_mean,mse_mean,r2_std,mse_std,rank_stab,use_stab,rank_group_all
 
     # === Step 4: Main workflow ===
     def run_analysis(self, run_name=None):
@@ -233,7 +229,7 @@ class LocalModelStabilityAnalyzer:
             "rank_group_all":rank_group_all,  # Transform to obtain the true ranking
             #"w1": w1,
             "prob_diagnostic":prob_diagnostic,
-            "d_auc_mean":d_auc_mean
+            
         }
         self.history.append(result)
         #print(f"LIME run completed: {result}")
