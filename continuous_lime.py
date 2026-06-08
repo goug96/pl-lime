@@ -144,7 +144,7 @@ class LimeStabilityAnalyzer:
 
                 
                 coef_all[num].append(coef_full)
-                rank_group_all[num].append(coef_abs_full*col_std)  
+                rank_group_all[num].append(coef_abs_full)  
                 hit_group_all[num].append(len(set(used_features) & set(range(4))))
 
         rank_stab = {k: multiple_run_consistency(v) for k, v in rank_group_all.items()}
