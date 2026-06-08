@@ -188,7 +188,7 @@ class LocalModelStabilityAnalyzer:
         start_time = time.time()
         X_instance = self.instance
 
-        prob_diagnostic,d_auc_mean,uu_value, kknots, use_set, r2_mean, mse_mean, r2_std, mse_std, rank_stab, use_stab,rank_group_all = self.single_run(X_instance)
+        prob_diagnostic,uu_value, kknots, use_set, r2_mean, mse_mean, r2_std, mse_std, rank_stab, use_stab,rank_group_all = self.single_run(X_instance)
         avg_similarity = []
         for i in range(len(self.continuous_features)):  # continuous_features comes first
             yy, xx = [], []
